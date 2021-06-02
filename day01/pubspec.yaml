@@ -30,6 +30,7 @@ dependencies:
   flutter_swiper: ^1.1.4
   cached_network_image: ^3.0.0
   flutter_screenutil: ^5.0.0
+  common_utils: ^1.1.1
   dio:
 
 dev_dependencies:

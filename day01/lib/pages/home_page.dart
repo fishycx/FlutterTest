@@ -3,6 +3,7 @@ import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -17,21 +18,28 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text('有蜜生活'),
         ),
+        backgroundColor: Color(0xF3F3F3),
         body: FutureBuilder(
             future: getHomePageContent(),
             builder: (context, snapshot) {
+              List <Widget> children = [];
               if (snapshot.hasData) {
-                var bannerList;
-                var data = snapshot.data;
+               var data = snapshot.data;
                 var componentList = data['data'];
                 for (var componentData in componentList) {
                   var id = componentData['identifier'] as String;
                   if (id == "banner") {
-                    bannerList = componentData['data'];
-                  } else {}
+                    children.add(SwiperDiy(swiperDateList:componentData['data']));
+                  } else if (id == "secondIcon") {
+                    children.add(TopNavigator(navigatorList:componentData['data']));
+                  } else if (id == "section") {
+                    var item = componentData['data'];
+                    print(item);
+                     children.add(ActionImageView(item:componentData['data']));          
+                  }
                 }
-                return Column(
-                  children: [SwiperDiy(swiperDateList: bannerList)],
+                return ListView(
+                  children: children,
                 );
               } else {
                 return Text('无数据');
@@ -46,7 +54,7 @@ class SwiperDiy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       return Container(
+    return Container(
       margin: EdgeInsets.all(12.w),
       width: 351.w,
       height: 162.w,
@@ -67,15 +75,22 @@ class TopNavigator extends StatelessWidget {
   final List navigatorList;
   TopNavigator({Key key, this.navigatorList}) : super(key: key);
 
-  Widget _gridViewItemUI(BuildContext context, item){
+  Widget _gridViewItemUI(BuildContext context, item) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         print('点击了导航');
       },
       child: Column(
         children: <Widget>[
           Image.network(item['icon'], width: ScreenUtil().setWidth(36)),
-          Text("$item['name']")
+          Container(
+            child: Text(
+              item['name'],
+              style: const TextStyle(fontSize: 11, color: Color.fromRGBO(51, 51, 51, 1)),
+             ),
+            margin:EdgeInsets.only(top:3),
+          ),
+          
         ],
       ),
     );
@@ -84,7 +99,40 @@ class TopNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
+      margin: EdgeInsets.all(12),
+      height: ScreenUtil().setHeight(150),
+      padding: EdgeInsets.only(top:15),
+      decoration: new BoxDecoration(
+          color: Colors.white, // 底色
+          //        borderRadius: new BorderRadius.circular((20.0)), // 圆角度
+          borderRadius: new BorderRadius.circular(3)),
+      child: GridView.count(
+        scrollDirection: Axis.horizontal,
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(5.0),
+        children: navigatorList.map((item) {
+          return _gridViewItemUI(context, item);
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class ActionImageView extends StatelessWidget {
+  final item;
+  ActionImageView({Key key, this.item}):super(key: key);
+  @override
+  Widget build(BuildContext context) {
+   EdgeInsets padding = EdgeInsets.fromLTRB(12, 0, 12, 0);
+   if(item['expand'] == 1) {
+     padding = EdgeInsets.zero;
+   }
+    return Container(
+      padding: padding,
+      alignment: Alignment.topCenter,
+      width: ScreenUtil().setWidth(item['width'] / 3),
+      // height: ScreenUtil().setHeight(item['height'] / 3),
+      child:Image.network(item['image'])
     );
   }
 }

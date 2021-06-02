@@ -5,6 +5,7 @@ import 'category_page.dart';
 import 'member_index.dart';
 import 'home_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:common_utils/common_utils.dart';
 
 
 class IndexPage extends StatefulWidget {
@@ -54,6 +55,9 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    LogUtil.init(isDebug: true);
+
      ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
