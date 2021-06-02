@@ -4,6 +4,7 @@ import 'cart_page.dart';
 import 'category_page.dart';
 import 'member_index.dart';
 import 'home_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class IndexPage extends StatefulWidget {
@@ -53,6 +54,13 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+     ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(375, 667),
+        orientation: Orientation.portrait);
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       bottomNavigationBar: BottomNavigationBar(
