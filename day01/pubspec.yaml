@@ -52,6 +52,9 @@ flutter:
   assets:
      - images/lake.jpeg
      - images/home/home_navi_left.png
+     - images/home/limitedBuy.png
+     - images/home/douyin.png
+     - images/home/home_more.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

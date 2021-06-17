@@ -1,8 +1,9 @@
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'LimitedBuyView.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,7 +38,12 @@ class _HomePageState extends State<HomePage> {
                   } else if (id == "section") {
                     children.add(ActionImageView(item: componentData['data']));
                   } else if (id == "rotation") {
-                    children.add(RotationView(swiperDateList: componentData['data']));
+                    children.add(
+                        RotationView(swiperDateList: componentData['data']));
+                  } else if (id == "fast") {
+                    children.add(LimitedBuyView(
+                      data: componentData['data'],
+                    ));
                   }
                 }
                 return ListView(
@@ -136,7 +142,6 @@ class ActionImageView extends StatelessWidget {
   }
 }
 
-
 class RotationView extends StatelessWidget {
   final List swiperDateList;
   RotationView({Key key, this.swiperDateList}) : super(key: key);
@@ -145,7 +150,6 @@ class RotationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.zero,
-      // width: 375.w,
       height: ScreenUtil().setWidth(110),
       alignment: Alignment.bottomCenter,
       child: Swiper(
