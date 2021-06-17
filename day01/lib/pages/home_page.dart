@@ -1,3 +1,4 @@
+import 'package:day01/pages/DouyinWidget.dart';
 import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -10,9 +11,18 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String homePageContent = '正在获取数据';
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
+  @override
+  void initState() {
+    super.initState();
+    print(111);
+  }
+
+  String homePageContent = '正在获取数据';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +52,10 @@ class _HomePageState extends State<HomePage> {
                         RotationView(swiperDateList: componentData['data']));
                   } else if (id == "fast") {
                     children.add(LimitedBuyView(
+                      data: componentData['data'],
+                    ));
+                  } else if (id == "trill") {
+                    children.add(DouyinWidget(
                       data: componentData['data'],
                     ));
                   }

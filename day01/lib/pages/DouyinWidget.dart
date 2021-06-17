@@ -1,21 +1,16 @@
-import 'package:day01/pages/DowntownWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LimitedBuyView extends StatelessWidget {
+class DouyinWidget extends StatelessWidget {
   final data;
-  LimitedBuyView({Key key, this.data}) : super(key: key);
+  DouyinWidget({Key key, this.data}) : super(key: key);
 
   Widget _titleWidget() {
     return Row(
       children: [
         Container(
-          child: new Image.asset("images/home/limitedBuy.png"),
+          child: new Image.asset("images/home/douyin.png"),
           padding: EdgeInsets.only(top: 10.w, left: 10.w),
-        ),
-        DowntownWidget(
-          nexHour: data['nextHour'],
-          nowTime: data['nowTime'],
         ),
         Expanded(
           child: Text(""),
@@ -40,39 +35,46 @@ class LimitedBuyView extends StatelessWidget {
     );
   }
 
+  String salesValue(value) {
+    if (value < 10000) {
+      return "已售$value件";
+    } else {
+      int count = (value / 10000).round();
+      return "已售$count万件";
+    }
+  }
+
   Widget _productView() {
-    List limitedBuyList = data['list'];
+    List limitedBuyList = data;
     var container = Container(
-        padding: EdgeInsets.only(top: 10.w),
-        height: 147.w,
+        padding: EdgeInsets.only(top: 20.w),
+        height: 177.w,
         child: ListView.builder(
             itemCount: limitedBuyList.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              var model = limitedBuyList[index];
+              Map model = limitedBuyList[index];
               return Container(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.network(
-                      model['mainPic'],
-                      width: 85.w,
-                      height: 85.w,
-                    ),
                     Container(
-                      child: Text(
-                        model['title'],
-                        maxLines: 1,
+                      child: Image.network(
+                        model['mainPic'],
+                        width: 85.w,
+                        height: 85.w,
                       ),
-                      padding: EdgeInsets.only(top: 5.w),
-                      width: 85.w,
-                      height: 23.w,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: AssetImage('images/home/douyin.png'),
+                      )),
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: 5.w, bottom: 1.w),
+                      padding: EdgeInsets.only(top: 5.w),
                       child: Row(
                         children: [
                           Text(
-                            "￥",
+                            "券后价￥",
                             style: TextStyle(
                               fontSize: 12,
                               color: Color(0xFFF42D51),
@@ -88,6 +90,25 @@ class LimitedBuyView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5.w),
+                      height: 14.w,
+                      width: 30.w,
+                      color: Color(0xFFF42D51),
+                      child: Text(
+                        '券${model['couponPrice'].toString().split('.')[0]}',
+                        style: TextStyle(color: Colors.white, fontSize: 10.w),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 5.w),
+                      child: Text(
+                        salesValue(model['monthSales']),
+                        style:
+                            TextStyle(color: Color(0xFF888888), fontSize: 10.w),
+                      ),
                     )
                   ],
                 ),
@@ -102,7 +123,7 @@ class LimitedBuyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(12),
+      margin: EdgeInsets.only(left: 12.w, right: 12.w),
       decoration: BoxDecoration(
           borderRadius: new BorderRadius.circular(10), color: Colors.white),
       // height: 193.w,

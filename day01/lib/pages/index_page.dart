@@ -7,37 +7,31 @@ import 'home_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:common_utils/common_utils.dart';
 
-
 class IndexPage extends StatefulWidget {
   @override
   _IndexPageState createState() => _IndexPageState();
 }
 
 class _IndexPageState extends State<IndexPage> {
-
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.home),
-      // ignore: deprecated_member_use
-      title: Text('首页')
-    ),
+        icon: Icon(CupertinoIcons.home),
+        // ignore: deprecated_member_use
+        title: Text('首页')),
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.search),
-      // ignore: deprecated_member_use
-      title: Text('分类')
-    ),
+        icon: Icon(CupertinoIcons.search),
+        // ignore: deprecated_member_use
+        title: Text('分类')),
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.shopping_cart),
-      // ignore: deprecated_member_use
-      title: Text('购物车')
-    ),
+        icon: Icon(CupertinoIcons.shopping_cart),
+        // ignore: deprecated_member_use
+        title: Text('购物车')),
     BottomNavigationBarItem(
-      icon:Icon(CupertinoIcons.profile_circled),
-      // ignore: deprecated_member_use
-      title: Text('会员中心')
-    ),
+        icon: Icon(CupertinoIcons.profile_circled),
+        // ignore: deprecated_member_use
+        title: Text('会员中心')),
   ];
-  final List tabBodies = [
+  final List<Widget> tabBodies = [
     HomePage(),
     CategoryPage(),
     CartPage(),
@@ -55,10 +49,9 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-
     LogUtil.init(isDebug: true);
 
-     ScreenUtil.init(
+    ScreenUtil.init(
         BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
             maxHeight: MediaQuery.of(context).size.height),
@@ -78,7 +71,10 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body: currentpage,
+      body: IndexedStack(
+        index: currentIndex,
+        children: tabBodies,
+      ),
     );
   }
 }
