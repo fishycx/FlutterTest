@@ -4,6 +4,7 @@ import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'HomeProductWidget.dart';
 import 'LimitedBuyView.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage>
         ),
         backgroundColor: Color(0xF3F3F3),
         body: FutureBuilder(
-            future: getHomePageContent(),
+            future: request("homePageContent"),
             builder: (context, snapshot) {
               List<Widget> children = [];
               if (snapshot.hasData) {
@@ -60,6 +61,8 @@ class _HomePageState extends State<HomePage>
                     ));
                   }
                 }
+                children.add(HomeProductWidget());
+
                 return ListView(
                   children: children,
                 );
