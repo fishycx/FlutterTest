@@ -50,7 +50,7 @@ class DouyinWidget extends StatelessWidget {
         padding: EdgeInsets.only(top: 20.w),
         height: 177.w,
         child: ListView.builder(
-            itemCount: limitedBuyList.length,
+            itemCount: limitedBuyList.length ?? 0,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               Map model = limitedBuyList[index];

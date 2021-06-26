@@ -5,7 +5,7 @@ const httpHeaders = {
   'Authorization': '',
 };
 
-Map<String,String> baseParams() {
+Map<String,dynamic> baseParams() {
   return {
     'clientId': 'iOS',
     'appVersion': '6.0.3',

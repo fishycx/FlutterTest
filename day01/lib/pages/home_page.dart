@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../service/service_method.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'HomeProductWidget.dart';
 import 'LimitedBuyView.dart';
@@ -17,15 +18,86 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
+  Map data;
+  List bannerList;
+  List secondIconList;
+  List rataionList;
+  Map sectionItem;
+  Map limitedData;
+  List douyinData;
+
+  String tailTime;
+  String headTime;
+  Map product;
+  Map talent;
+  bool hasNextPage = true;
+  List hotGoodsList = [];
+
+  GlobalKey<ClassicalFooterWidgetState> _footerkey =
+      new GlobalKey<ClassicalFooterWidgetState>();
+  GlobalKey<ClassicalHeaderWidgetState> _headerkey =
+      new GlobalKey<ClassicalHeaderWidgetState>();
+
   @override
   void initState() {
+    _getHotGoods();
     super.initState();
-    print(111);
+  }
+
+  List<Widget> homeContent() {
+    List<Widget> children = [];
+    var componentList = data['data'];
+    for (var componentData in componentList) {
+      var id = componentData['identifier'] as String;
+      if (id == "banner") {
+        bannerList = componentData['data'];
+        children.add(SwiperDiy(swiperDateList: bannerList));
+      } else if (id == "secondIcon") {
+        secondIconList = componentData['data'];
+        children.add(TopNavigator(navigatorList: secondIconList));
+      } else if (id == "section") {
+        sectionItem = componentData['data'];
+        children.add(ActionImageView(item: sectionItem));
+      } else if (id == "rotation") {
+        rataionList = componentData['data'];
+        children.add(RotationView(swiperDateList: rataionList));
+      } else if (id == "fast") {
+        limitedData = componentData['data'];
+        children.add(LimitedBuyView(
+          data: limitedData,
+        ));
+      } else if (id == "trill") {
+        douyinData = componentData['data'];
+        children.add(DouyinWidget(
+          data: douyinData,
+        ));
+      }
+    }
+    children.add(HomeProductWidget(
+      hotGoodsList: hotGoodsList,
+    ));
+    return children;
+  }
+
+  void _getHotGoods() {
+    Map<String, dynamic> params = {'tailTime': tailTime, 'headTime': headTime};
+    request("homeProuct", params).then((value) {
+      product = value['data']['product'];
+      // talent = value['data']['talent'];
+      tailTime = product['tailTime'].toString();
+      headTime = product['headTime'].toString();
+      List records = product['records'];
+      hasNextPage = records.isNotEmpty;
+      setState(() {
+        hotGoodsList.addAll(records);
+      });
+    });
   }
 
   String homePageContent = '正在获取数据';
   @override
   Widget build(BuildContext context) {
+    List<Widget> homeContents;
     return Scaffold(
         appBar: AppBar(
           title: Text('有蜜生活'),
@@ -34,37 +106,43 @@ class _HomePageState extends State<HomePage>
         body: FutureBuilder(
             future: request("homePageContent"),
             builder: (context, snapshot) {
-              List<Widget> children = [];
               if (snapshot.hasData) {
-                var data = snapshot.data;
-                var componentList = data['data'];
-                for (var componentData in componentList) {
-                  var id = componentData['identifier'] as String;
-                  if (id == "banner") {
-                    children
-                        .add(SwiperDiy(swiperDateList: componentData['data']));
-                  } else if (id == "secondIcon") {
-                    children.add(
-                        TopNavigator(navigatorList: componentData['data']));
-                  } else if (id == "section") {
-                    children.add(ActionImageView(item: componentData['data']));
-                  } else if (id == "rotation") {
-                    children.add(
-                        RotationView(swiperDateList: componentData['data']));
-                  } else if (id == "fast") {
-                    children.add(LimitedBuyView(
-                      data: componentData['data'],
-                    ));
-                  } else if (id == "trill") {
-                    children.add(DouyinWidget(
-                      data: componentData['data'],
-                    ));
-                  }
-                }
-                children.add(HomeProductWidget());
-
-                return ListView(
-                  children: children,
+                data = snapshot.data;
+                homeContents = homeContent();
+                return EasyRefresh(
+                  bottomBouncing: true,
+                  header: ClassicalHeader(
+                      key: _headerkey,
+                      bgColor: Colors.white,
+                      textColor: Colors.pink,
+                      refreshReadyText: '释放即可刷新',
+                      refreshText: '下拉即可刷新',
+                      refreshedText: '数据已刷新',
+                      refreshFailedText: '加载失败',
+                      refreshingText: '正在刷新',
+                      showInfo: false),
+                  footer: ClassicalFooter(
+                    key: _footerkey,
+                    bgColor: Colors.white,
+                    textColor: Colors.pink,
+                    noMoreText: '没有更多了',
+                    loadReadyText: '上拉加载',
+                    loadingText: '加载中',
+                  ),
+                  child: ListView(
+                    children: homeContents,
+                  ),
+                  onLoad: () async {
+                    _getHotGoods();
+                  },
+                  onRefresh: () async {
+                    request('homePageContent').then((value) {
+                      setState(() {
+                        data = value;
+                        homeContents = homeContent();
+                      });
+                    });
+                  },
                 );
               } else {
                 return Text('无数据');
