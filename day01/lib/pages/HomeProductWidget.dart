@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeProductWidget extends StatefulWidget {
@@ -11,11 +10,6 @@ class HomeProductWidget extends StatefulWidget {
 }
 
 class _HomeProductWidgetState extends State<HomeProductWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Widget productTile = Container(
     margin: EdgeInsets.only(top: 10),
     child: Image.asset("images/home/home_pdtTitle.png"),
@@ -38,9 +32,7 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
         return InkWell(
           onTap: () {},
           child: Container(
-            margin: EdgeInsets.only(top: 5.w),
             width: productWidth,
-            height: 300.w,
             color: Colors.white,
             child: Column(
               children: <Widget>[
@@ -66,7 +58,8 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
       }).toList();
 
       return Wrap(
-        spacing: 2,
+        spacing: 10.w,
+        runSpacing: 10.w,
         children: listWidget,
       );
     } else {
@@ -76,16 +69,15 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
 
   Container _couponWidget(e) {
     return Container(
-      margin: EdgeInsets.only(left: 10.w, top: 9.w),
+      margin: EdgeInsets.only(left: 10.w, top: 9.h, bottom: 9.h, right: 10.w),
       alignment: Alignment.centerLeft,
-      height: 17.h,
       child: Stack(
         children: [
           Positioned(
             child: Image.asset(
               'images/home/home_coupon.png',
               fit: BoxFit.fill,
-              centerSlice: Rect.fromLTRB(24.0.w, 6.0.w, 27.0.w, 7.0.w),
+              centerSlice: Rect.fromLTRB(24.0, 2, 27.0, 4),
             ),
             left: 0,
             right: 0,
@@ -93,11 +85,12 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
             bottom: 0,
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(24.w, 2.w, 5.w, 0.w),
+            padding: EdgeInsets.fromLTRB(24, 2, 5, 0),
+            constraints: BoxConstraints(minWidth: 50),
             child: Text(
-              e['couponPrice'].toString(),
+              (e['couponPrice'] ?? "0").toString(),
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(12),
+                fontSize: 12,
                 color: Color(0xffFB2020),
               ),
             ),
@@ -140,8 +133,7 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
 
   Container _pdtPriceWidget(e) {
     return Container(
-      height: 23.w,
-      margin: EdgeInsets.only(left: 10.w),
+      margin: EdgeInsets.only(left: 10.w, top: 5.w),
       alignment: Alignment.centerLeft,
       child: Row(
         children: [
@@ -165,25 +157,25 @@ class _HomeProductWidgetState extends State<HomeProductWidget> {
 
   Widget _titleWidget(title) {
     return Container(
-      padding: EdgeInsets.only(top: 7.w, left: 10.w, right: 10.w),
+      padding: EdgeInsets.only(top: 7, left: 10.w, right: 10.w),
+      alignment: Alignment.centerLeft,
       child: Text.rich(
         TextSpan(children: [
           WidgetSpan(
               child: Image.asset(
             'images/home/pdt_tb.png',
-            width: 14.w,
-            height: 14.w,
+            alignment: Alignment.centerLeft,
           )),
           TextSpan(
-            text: ' ' + title,
+            text: "  " + title,
             style: TextStyle(
               color: Color(0xff333333),
-              fontSize: ScreenUtil().setSp(14),
+              fontSize: 14,
             ),
           ),
         ]),
-        maxLines: 2,
         overflow: TextOverflow.ellipsis,
+        maxLines: 2,
       ),
     );
   }

@@ -63,9 +63,11 @@ class _HomePageState extends State<HomePage>
         children.add(RotationView(swiperDateList: rataionList));
       } else if (id == "fast") {
         limitedData = componentData['data'];
-        children.add(LimitedBuyView(
-          data: limitedData,
-        ));
+        if (limitedData != null) {
+          children.add(LimitedBuyView(
+            data: limitedData,
+          ));
+        }
       } else if (id == "trill") {
         douyinData = componentData['data'];
         children.add(DouyinWidget(
@@ -189,8 +191,10 @@ class TopNavigator extends StatelessWidget {
           Container(
             child: Text(
               item['name'],
-              style: const TextStyle(
-                  fontSize: 11, color: Color.fromRGBO(51, 51, 51, 1)),
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(11),
+                color: Color.fromRGBO(51, 51, 51, 1),
+              ),
             ),
             margin: EdgeInsets.only(top: 3),
           ),
@@ -202,16 +206,16 @@ class TopNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(12),
-      height: ScreenUtil().setHeight(150),
-      padding: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.all(12.w),
+      height: ScreenUtil().setHeight(150.w),
+      padding: EdgeInsets.only(top: 15.w),
       decoration: new BoxDecoration(
           color: Colors.white, // 底色
-          borderRadius: new BorderRadius.circular(3)),
+          borderRadius: new BorderRadius.circular(3.w)),
       child: GridView.count(
         scrollDirection: Axis.horizontal,
         crossAxisCount: 2,
-        padding: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(5.w),
         children: navigatorList.map((item) {
           return _gridViewItemUI(context, item);
         }).toList(),
